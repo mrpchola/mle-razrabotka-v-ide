@@ -3,11 +3,24 @@ class DataFrameReporter:
         self.float_format = float_format
         self.percent_format = percent_format
         self.include_all = include_all
-
-    # добавьте в класс метод show_report
+    
     def show_report(self, df, title=None):
-        if title != None:
+        if title:
             print(title)
-        else:
-            pass
-        return f"Количество столбцов: {df.shape[1]}\nКоличество строк: {df.shape[0]}\nКоличество дубликатов: {df.duplicated().sum()}\nДоля дубликатов: {format(df.duplicated().sum() / df.shape[0], '0.02%')}"
+    
+        print('Количество столбцов:', df.shape[1])
+        print('Количество строк:', df.shape[0])
+
+        duplicates = df.duplicated().sum()
+        print('Количество дубликатов:', duplicates)
+
+        print('Доля дубликатов:', format(duplicates / df.shape[0], self.percent_format))
+
+        print(df.describe(include='all' if self.include_all else None))
+        
+        # выведите количество пропусков во всем датафрейме одним числом
+        print('Количество пропусков:', df.isna().sum().sum())
+        
+        # выведите долю пропусков во всем датафрейме одним числом с плавающей точкой
+        # в формате float_format
+        print('Доля пропусков:', format(df.isna().sum().sum() / (df.shape[0] * df.shape[1]), self.float_format))
